@@ -29,12 +29,21 @@ with tab1:
     current_year = datetime.now().year
     store_age = current_year - int(establishment_year)
 
-    sugar_content = st.selectbox("Product Sugar Content", ["Low Fat", "Regular", "Non-Edible"])
-    product_type = st.selectbox("Product Type", ["Dairy", "Soft Drinks", "Meat", "Fruits and Vegetables", "Household", "Baking Goods"])
+    # Logically separated options
+    sugar_content = st.selectbox("Product Fat Content", ["Low Fat", "Regular", "Non-Edible"])
+    
+    # Conditionally filter Product Types based on whether it's edible or non-edible
+    if sugar_content == "Non-Edible":
+        product_type = st.selectbox("Product Type", ["Household", "Health and Hygiene", "Starchy Foods"])
+        category_code = "NC"  # Non-Consumable prefix usually
+    else:
+        product_type = st.selectbox("Product Type", ["Dairy", "Soft Drinks", "Meat", "Fruits and Vegetables", "Baking Goods", "Canned", "Breads", "Starchy Foods", "Frozen Foods"])
+        category_code = "FD"  # Food prefix usually
+
     store_size = st.selectbox("Store Size", ["Small", "Medium", "High"])
     city_type = st.selectbox("Store Location City Type", ["Tier 1", "Tier 2", "Tier 3"])
     store_type = st.selectbox("Store Type", ["Supermarket Type1", "Supermarket Type2", "Supermarket Type3", "Grocery Store"])
-    category_code = st.text_input("Product Category Code", value="DR")
+    
     store_id = st.text_input("Store ID", value="OUT049")
     product_id = st.text_input("Product ID", value="FDA15")
     product_type_category = st.text_input("Product Type Category", value="1")
