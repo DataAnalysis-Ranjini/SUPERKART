@@ -52,28 +52,29 @@ if mode == "Single Prediction":
 
     if st.button("Predict Sales"):
         sample = {
-            'Product_Weight': float(product_weight),
-            'Product_Sugar_Content': str(product_sugar_content),
-            'Product_Allocated_Area': float(product_allocated_area),
-            'Product_Type': str(product_type),
-            'Product_MRP': float(product_mrp),
-            'Store_Establishment_Year': int(store_establishment_year),
-            'Store_Size': str(store_size),
-            'Store_Location_City_Type': str(store_location_city_type),
-            'Store_Type': str(store_type),
-            'Product_Category_Code': str(product_category_code),
-            'Store_Age': int(store_age),
-            'Product_Type_Category': int(product_type_category),
-            'Product_Category_Prefix': str(product_category_prefix),
-            'Store_Id': str(store_id)
+            'Product_Weight': product_weight,
+            'Product_Sugar_Content': product_sugar_content,
+            'Product_Allocated_Area': product_allocated_area,
+            'Product_Type': product_type,
+            'Product_MRP': product_mrp,
+            'Store_Establishment_Year': store_establishment_year,
+            'Store_Size': store_size,
+            'Store_Location_City_Type': store_location_city_type,
+            'Store_Type': store_type,
+            'Product_Category_Code': product_category_code,
+            'Store_Age': store_age,
+            'Product_Type_Category': product_type_category,
+            'Product_Category_Prefix': product_category_prefix,
+            'Store_Id': store_id
         }
         
         input_data = pd.DataFrame([sample])
         input_data = input_data.reindex(columns=EXPECTED_COLUMNS)
         
-        # Enforce strict type separation and handle missing values
+        # Enforce strict type conversion safely to prevent ufunc / isnan errors
         for col in NUMERIC_COLS:
             input_data[col] = pd.to_numeric(input_data[col], errors='coerce').fillna(0.0)
+            
         for col in CATEGORICAL_COLS:
             input_data[col] = input_data[col].fillna("Missing").astype(str).str.strip()
 
@@ -100,6 +101,7 @@ elif mode == "Batch Prediction":
         
         for col in NUMERIC_COLS:
             input_data[col] = pd.to_numeric(input_data[col], errors='coerce').fillna(0.0)
+            
         for col in CATEGORICAL_COLS:
             input_data[col] = input_data[col].fillna("Missing").astype(str).str.strip()
             
